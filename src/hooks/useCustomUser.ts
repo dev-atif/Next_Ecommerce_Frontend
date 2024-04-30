@@ -5,7 +5,7 @@ import axios from "axios";
 export const CustomUser = () => {
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/user", {
+      const response = await axios.get("http://localhost:5000/api/user", {
         withCredentials: true,
       });
       if (response.data.success) {

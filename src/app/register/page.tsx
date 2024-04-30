@@ -51,7 +51,7 @@ const page = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/signup",
+        "http://localhost:5000/api/signup",
         getvalues
       );
       if (response.data.success) {
