@@ -48,7 +48,7 @@ const page = () => {
         fetchData().then((data) => {
           Dispatch(setUserDetails(data));
         });
-        /* route.push('/') */
+        route.push('/')
       } else {
         const error_message = response.data.message;
         toast.error(error_message);
