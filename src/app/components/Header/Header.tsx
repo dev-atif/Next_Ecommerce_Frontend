@@ -28,7 +28,7 @@ const Header = () => {
 const Dispatch = useAppDispatch()
   const Logout = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/userLogout", {
+      const response = await axios.get("http://localhost:5000/api/userLogout", {
         withCredentials: true,
       });
       if (response.data.success) {
