@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReduxProvider } from "@/common/ReduxProvider";
 import { Toaster } from "react-hot-toast";
 import Header from "./components/Header/Header";
+import FooterBar from "./components/FooterBar/FooterBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,10 +23,13 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <Toaster/>
-          <div>
+          <div className="sticky top-0 w-full z-20">
             <Header/>
           </div>
         {children}
+       { <div className="z-30 fixed bottom-0 w-full">
+        <FooterBar/>
+        </div>}
         </ReduxProvider>
       </body>
     </html>

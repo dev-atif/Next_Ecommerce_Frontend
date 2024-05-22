@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../shared/Logo";
 import { CiSearch } from "react-icons/ci";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -11,13 +11,15 @@ import { getUser, setUserDetails } from "@/redux/userSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { usePathname } from "next/navigation";
+import ProfileDropdown from "./ProfileDropdown";
 
-interface UserData {
+export interface UserData {
   _id: string;
   name: string;
   LastName: string;
   number: string;
   email: string;
+  role: string;
   password: string;
   profileImage: string;
   createdAt: string; // Assuming createdAt and updatedAt are strings representing dates
@@ -25,9 +27,10 @@ interface UserData {
   __v: number;
 }
 const Header = () => {
+  const [open, setOpen] = useState(false);
   const Auth: UserData | null | undefined = useAppSelector(getUser);
   const pathname = usePathname();
-  
+
   const Dispatch = useAppDispatch();
   const Logout = async () => {
     try {
@@ -65,7 +68,9 @@ const Header = () => {
         }
       >
         <div className="w-10 ">
-          <Logo w={80} h={60} />
+          <Link href={"/"}>
+            <Logo w={80} h={60} />
+          </Link>
         </div>
         {/* -Search Bar ------------------------------- */}
         <div className="w-full  md:flex hidden justify-center">
@@ -86,21 +91,29 @@ const Header = () => {
         </div>
         {/* -User login and Cart --------------------------------- */}
         <div className="flex items-center   gap-7">
-          <div>
+          <div className="relative flex justify-center">
             {Auth ? (
               <>
-                <div className="w-full ml-8 md:ml-0">
-                  <img
-                    src={(Auth as UserData).profileImage}
-                    className="  rounded-full  xl:w-24 lg:w-36  md:w-52 h-12 w-12 "
-                  />
-                </div>
+                {(Auth as UserData)?.profileImage ? (
+                  <div className="w-full ml-8 md:ml-0 ">
+                    <img
+                      onClick={() => setOpen((prev) => !prev)}
+                      src={(Auth as UserData)?.profileImage}
+                      className="cursor-pointer  rounded-full  xl:w-24 lg:w-36  md:w-52 h-12 w-12 "
+                    />
+                  </div>
+                ) : (
+                  <span className="text-3xl ">
+                    <FaRegCircleUser size={40} />
+                  </span>
+                )}
               </>
-            ) : (
-              <span className="text-3xl cursor-pointer">
-                <FaRegCircleUser size={40} />
-              </span>
-            )}
+            ) : null}
+            {open && Auth && (Auth as UserData).role === "Admin" && (
+              <div className="absolute top-14 bg-white whitespace-nowrap shadow-md rounded-b-md">
+                <ProfileDropdown onClose={() => setOpen((prev) => !prev)} />
+              </div>
+            )}  
           </div>
           <div className="relative cursor-pointer ">
             <span className="text-3xl ">

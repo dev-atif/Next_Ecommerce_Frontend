@@ -10,7 +10,7 @@ export const CustomUser = () => {
       });
       if (response.data.success) {
         return response.data.data; // Return the response data
-        console.log("test", response.data.data); // Do something with the response data
+       
       }
     } catch (error) {
       console.error(error);
