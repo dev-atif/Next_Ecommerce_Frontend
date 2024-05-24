@@ -88,3 +88,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.scrollbar::-webkit-scrollbar{
+  display: none;
+
+}

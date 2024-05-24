@@ -1,11 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Inputfield from "./shared/Inputfield";
 import toast from "react-hot-toast";
 import { RxCrossCircled } from "react-icons/rx";
 import { FaRegImage } from "react-icons/fa";
 import axios from "axios";
-export const accessoriesCategories = [
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { Products } from "./Interfaces";
+import { geteditProduct, setEditProduct } from "@/redux/EditProductSlice";
+const accessoriesCategories = [
   "Headphones",
   "Chargers",
   "Power Banks",
@@ -20,7 +23,12 @@ export const accessoriesCategories = [
 interface ProductsTablesProps {
   Tabshift: () => void;
 }
-const Add_Products:React.FC<ProductsTablesProps> = ({Tabshift}) => {
+const Edit_Product: React.FC<ProductsTablesProps> = ({ Tabshift }) => {
+  //get data from edir product slice
+  const { products } = useAppSelector((s) => s.products);
+  //Dispatch to make slice null
+  const Dispatch = useAppDispatch()
+  //
   const [inputValue, setInputValue] = useState("");
   const [stringArray, setStringArray] = useState<string[]>([]);
   const [productdata, setProductdata] = useState({
@@ -30,6 +38,12 @@ const Add_Products:React.FC<ProductsTablesProps> = ({Tabshift}) => {
     Sale_price: "",
     Category: "",
   });
+  useEffect(() => {
+    if (products) {
+      setProductdata(products), setStringArray(products?.Product_Image);
+    }
+  }, [products]);
+
   //On change function to get values
   const getProductvalue = (e: any) => {
     const { name, value } = e.target;
@@ -68,7 +82,7 @@ const Add_Products:React.FC<ProductsTablesProps> = ({Tabshift}) => {
     setInputValue("");
   };
   //Submit Product details
-  const AddProductHandle = async (e: any) => {
+  const UpdateProductHandle = async (e: any) => {
     e.preventDefault();
     const { Product_Name, Details, Price, Category } = productdata;
     if (
@@ -91,15 +105,16 @@ const Add_Products:React.FC<ProductsTablesProps> = ({Tabshift}) => {
     };
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/Addproduct",
+        "http://localhost:5000/api/updateproduct",
         productpayload,
         { withCredentials: true }
       );
       if (response.data.success) {
         const success_message = response.data.message;
         toast.success(success_message);
-        resetProductData()
-        Tabshift()
+        resetProductData();
+       Dispatch(setEditProduct(null))
+        Tabshift();
       } else {
         const error_message = response.data.message;
         toast.error(error_message);
@@ -235,10 +250,12 @@ const Add_Products:React.FC<ProductsTablesProps> = ({Tabshift}) => {
         </div>
         <div className="text-center  mt-12">
           <button
-            onClick={AddProductHandle}
+            onClick={
+              UpdateProductHandle
+            }
             className="text-white bg-red-400 py-2 w-1/3 rounded-lg hover:bg-black transition-all transform duration-500"
           >
-            Add Product
+            Update Product
           </button>
         </div>
       </div>
@@ -246,4 +263,4 @@ const Add_Products:React.FC<ProductsTablesProps> = ({Tabshift}) => {
   );
 };
 
-export default Add_Products;
+export default Edit_Product;

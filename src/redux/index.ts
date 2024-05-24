@@ -33,11 +33,13 @@ const persistConfig = {
 };
 // ....
 import userReducer from "./userSlice";
-
+import EditProduct from './EditProductSlice'
 const persistedReducer = persistReducer(persistConfig, userReducer);
+/* const persistedProductReducer = persistReducer(persistConfig, EditProduct); */
 export const store = configureStore({
   reducer: {
     user: persistedReducer,
+    products: EditProduct,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
